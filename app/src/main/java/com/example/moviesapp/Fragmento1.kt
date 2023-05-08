@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviesapp.models.Movie
 import com.example.moviesapp.models.MoviesResponse
@@ -68,7 +69,7 @@ class Fragmento1 : android.app.Fragment() {
             adapterTop.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
                 override fun onItemClick(position: Int) {
                     Toast.makeText(context,"Is clicking Top no. $position",Toast.LENGTH_SHORT).show()
-                    replaceFragment(Fragmento2())
+                    replaceFragment(Fragmento2(),movies[position])
                 }
             })
         }
@@ -80,8 +81,8 @@ class Fragmento1 : android.app.Fragment() {
             np_movies_list.adapter = adapterNP
             adapterNP.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
                 override fun onItemClick(position: Int) {
-                    var tt = movies[position].title
-                    Toast.makeText(context,"Is clicking NP  $tt",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,"Is clicking NP  $position",Toast.LENGTH_SHORT).show()
+                    replaceFragment(Fragmento2(),movies[position])
 
                 }
             })
@@ -143,10 +144,14 @@ class Fragmento1 : android.app.Fragment() {
 
     }
 
-    private fun replaceFragment(Fragment: android.app.Fragment) {
-
+    private fun replaceFragment(Fragment: android.app.Fragment,movie:Movie) {
+        val bundle = bundleOf( TITLE_BUNDLE to  movie.title,
+        VOTEAVG_BUNDLE to movie.voteavg,
+        OVERVIEW_BUNDLE to movie.overview,
+        BACKDROP_BUNDLE to movie.backdrop)
         val fragmentManager = fragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
+        Fragment.arguments = bundle
         fragmentTransaction.replace(R.id.frameContainer,Fragment)
         fragmentTransaction.disallowAddToBackStack()
         fragmentTransaction.commit()
