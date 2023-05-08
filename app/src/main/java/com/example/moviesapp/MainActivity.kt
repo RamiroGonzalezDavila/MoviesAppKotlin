@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviesapp.models.Movie
@@ -25,11 +26,13 @@ import kotlinx.android.synthetic.main.movies_item.view.ItemEntero
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+import kotlin.concurrent.thread
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        Thread.sleep(3000)
+        setTheme(R.style.Theme_MoviesApp)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         replaceFragment(Fragmento1())

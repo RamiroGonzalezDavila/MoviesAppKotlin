@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.MoviesApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.App.SplashTheme" parent="Theme.SplashScreen">
+        <item name="android:windowBackground">@drawable/splashscreen</item>
+
+    </style>
+
 </resources>

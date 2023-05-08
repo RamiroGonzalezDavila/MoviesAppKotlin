@@ -68,7 +68,6 @@ class Fragmento1 : android.app.Fragment() {
             rv_movies_list.adapter = adapterTop
             adapterTop.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
                 override fun onItemClick(position: Int) {
-                    Toast.makeText(context,"Is clicking Top no. $position",Toast.LENGTH_SHORT).show()
                     replaceFragment(Fragmento2(),movies[position])
                 }
             })
@@ -81,9 +80,7 @@ class Fragmento1 : android.app.Fragment() {
             np_movies_list.adapter = adapterNP
             adapterNP.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
                 override fun onItemClick(position: Int) {
-                    Toast.makeText(context,"Is clicking NP  $position",Toast.LENGTH_SHORT).show()
                     replaceFragment(Fragmento2(),movies[position])
-
                 }
             })
         }

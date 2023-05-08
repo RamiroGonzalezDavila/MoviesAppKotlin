@@ -1,22 +1,14 @@
 package com.example.moviesapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.material3.Text
-import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
-import com.example.moviesapp.models.Movie
-import kotlinx.android.synthetic.main.fragment_fragmento2.specific_movie_title
-import kotlinx.android.synthetic.main.movies_item.view.movie_poster
-import java.util.prefs.BackingStoreException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,7 +45,7 @@ class Fragmento2 : android.app.Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_fragmento2, container, false)
-        val backBut : Button = view.findViewById(R.id.button)
+        val backBut : Button = view.findViewById(R.id.Bt_regresar)
         backBut.setOnClickListener {
             replaceFragment(Fragmento1())
         }
