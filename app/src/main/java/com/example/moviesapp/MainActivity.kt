@@ -1,7 +1,8 @@
 package com.example.moviesapp
 
+import android.app.Fragment
 import android.os.Bundle
-import android.text.TextUtils.replace
+//import android.text.TextUtils.replace
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,68 +24,24 @@ import kotlinx.android.synthetic.main.fragment_fragmento1.rv_movies_list
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import androidx.fragment.app.commit
+
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        val fragmentTrans = supportFragmentManager.beginTransaction()
-            fragmentTrans.replace<Fragmento1>(R.id.frameContainer)
-            fragmentTrans.commit()
-
-
-
-
-        rv_movies_list.layoutManager =LinearLayoutManager(this)
-        rv_movies_list.setHasFixedSize(true)
-        getTopMovieData { movies: List<Movie> ->
-            rv_movies_list.adapter = MovieAdapter(movies)
-        }
-
-        np_movies_list.layoutManager =LinearLayoutManager(this)
-        np_movies_list.setHasFixedSize(true)
-        getNowPlayingMovieData { movies: List<Movie> ->
-            np_movies_list.adapter = MovieAdapter(movies)
-        }
-    }
-
-    private fun getTopMovieData(callback : (List<Movie>)-> Unit){
-        val apiService = MovieApiService.getInstance().create(MoviesApiInterface::class.java)
-        apiService.getTopList().enqueue(object : Callback<MoviesResponse>{
-            override fun onResponse(
-                call: Call<MoviesResponse>,
-                response: Response<MoviesResponse>
-            ) {
-                return callback(response.body()!!.movies)
-            }
-
-            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-
-        })
+        replaceFragment(Fragmento1())
 
     }
 
-    private fun getNowPlayingMovieData(callback : (List<Movie>)-> Unit){
-        val apiService = MovieApiService.getInstance().create(MoviesApiInterface::class.java)
-        apiService.getNowPlayingList().enqueue(object : Callback<MoviesResponse>{
-            override fun onResponse(
-                call: Call<MoviesResponse>,
-                response: Response<MoviesResponse>
-            ) {
-                return callback(response.body()!!.movies)
-            }
+    private fun replaceFragment(Fragment: Fragment) {
 
-            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
+        val fragmentManager = fragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frameContainer,Fragment)
+        fragmentTransaction.commit()
     }
+
+
 }

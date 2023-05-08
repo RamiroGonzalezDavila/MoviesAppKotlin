@@ -5,6 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moviesapp.models.Movie
+import com.example.moviesapp.models.MoviesResponse
+import com.example.moviesapp.services.MovieApiService
+import com.example.moviesapp.services.MoviesApiInterface
+import kotlinx.android.synthetic.main.activity_main.frameContainer
+import kotlinx.android.synthetic.main.fragment_fragmento1.np_movies_list
+import kotlinx.android.synthetic.main.fragment_fragmento1.rv_movies_list
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -16,7 +27,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [Fragmento1.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Fragmento1 : Fragment() {
+class Fragmento1 : android.app.Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -27,6 +38,7 @@ class Fragmento1 : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
@@ -35,6 +47,21 @@ class Fragmento1 : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_fragmento1, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        rv_movies_list.layoutManager = LinearLayoutManager(context)
+        rv_movies_list.setHasFixedSize(true)
+        getTopMovieData { movies: List<Movie> ->
+            rv_movies_list.adapter = MovieAdapter(movies)
+        }
+        np_movies_list.layoutManager = LinearLayoutManager(context)
+        np_movies_list.setHasFixedSize(true)
+        getNowPlayingMovieData { movies: List<Movie> ->
+            np_movies_list.adapter = MovieAdapter(movies)
+        }
     }
 
     companion object {
@@ -56,4 +83,41 @@ class Fragmento1 : Fragment() {
                 }
             }
     }
+    private fun getTopMovieData(callback : (List<Movie>)-> Unit){
+        val apiService = MovieApiService.getInstance().create(MoviesApiInterface::class.java)
+        apiService.getTopList().enqueue(object : Callback<MoviesResponse> {
+            override fun onResponse(
+                call: Call<MoviesResponse>,
+                response: Response<MoviesResponse>
+            ) {
+                return callback(response.body()!!.movies)
+            }
+
+            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+    }
+
+    private fun getNowPlayingMovieData(callback : (List<Movie>)-> Unit){
+        val apiService = MovieApiService.getInstance().create(MoviesApiInterface::class.java)
+        apiService.getNowPlayingList().enqueue(object : Callback<MoviesResponse> {
+            override fun onResponse(
+                call: Call<MoviesResponse>,
+                response: Response<MoviesResponse>
+            ) {
+                return callback(response.body()!!.movies)
+            }
+
+            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+    }
+
+
 }
