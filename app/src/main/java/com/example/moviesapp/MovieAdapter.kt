@@ -14,19 +14,34 @@ import kotlinx.android.synthetic.main.movies_item.view.movie_vote_avarage
 class MovieAdapter (
     private val movies : List<Movie>
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>(){
-    class MovieViewHolder(view : View) : RecyclerView.ViewHolder(view){
+
+    private lateinit var mListener : onItemClickListener
+    interface onItemClickListener{
+        fun onItemClick(position: Int)
+    }
+    fun setOnItemClickListener(listener: onItemClickListener){
+        mListener = listener
+    }
+
+    class MovieViewHolder(view : View, listener: onItemClickListener) : RecyclerView.ViewHolder(view){
         private val IMAGE_BASE = "https://image.tmdb.org/t/p/w500/"
+        init {
+            itemView.setOnClickListener{
+                listener.onItemClick(adapterPosition)
+            }
+        }
         fun bindMovie(movie:Movie){
             itemView.movie_title.text = movie.title
             itemView.movie_release_date.text = movie.release
             itemView.movie_vote_avarage.text = movie.voteavg
             Glide.with(itemView).load(IMAGE_BASE+movie.poster).into(itemView.movie_poster)
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         return MovieViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.movies_item,parent,false)
+            LayoutInflater.from(parent.context).inflate(R.layout.movies_item,parent,false), mListener
         )
     }
 

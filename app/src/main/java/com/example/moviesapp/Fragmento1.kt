@@ -1,10 +1,12 @@
 package com.example.moviesapp
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviesapp.models.Movie
 import com.example.moviesapp.models.MoviesResponse
@@ -13,6 +15,7 @@ import com.example.moviesapp.services.MoviesApiInterface
 import kotlinx.android.synthetic.main.activity_main.frameContainer
 import kotlinx.android.synthetic.main.fragment_fragmento1.np_movies_list
 import kotlinx.android.synthetic.main.fragment_fragmento1.rv_movies_list
+import kotlinx.android.synthetic.main.movies_item.view.ItemEntero
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,6 +44,10 @@ class Fragmento1 : android.app.Fragment() {
 
     }
 
+    override fun onDetach() {
+        super.onDetach()
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,15 +59,30 @@ class Fragmento1 : android.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         rv_movies_list.layoutManager = LinearLayoutManager(context)
         rv_movies_list.setHasFixedSize(true)
         getTopMovieData { movies: List<Movie> ->
-            rv_movies_list.adapter = MovieAdapter(movies)
+            var adapterTop = MovieAdapter(movies)
+            rv_movies_list.adapter = adapterTop
+            adapterTop.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
+                override fun onItemClick(position: Int) {
+                    Toast.makeText(context,"Is clicking Top no. $position",Toast.LENGTH_SHORT).show()
+                    replaceFragment(Fragmento2())
+                }
+            })
         }
+
         np_movies_list.layoutManager = LinearLayoutManager(context)
         np_movies_list.setHasFixedSize(true)
         getNowPlayingMovieData { movies: List<Movie> ->
-            np_movies_list.adapter = MovieAdapter(movies)
+            var adapterNP = MovieAdapter(movies)
+            np_movies_list.adapter = adapterNP
+            adapterNP.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
+                override fun onItemClick(position: Int) {
+                    Toast.makeText(context,"Is clicking NP no. $position",Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 
@@ -117,6 +139,15 @@ class Fragmento1 : android.app.Fragment() {
 
         })
 
+    }
+
+    private fun replaceFragment(Fragment: android.app.Fragment) {
+
+        val fragmentManager = fragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frameContainer,Fragment)
+        fragmentTransaction.disallowAddToBackStack()
+        fragmentTransaction.commit()
     }
 
 

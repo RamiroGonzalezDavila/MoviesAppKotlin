@@ -21,6 +21,7 @@ import com.example.moviesapp.services.MoviesApiInterface
 import com.example.moviesapp.ui.theme.MoviesAppTheme
 import kotlinx.android.synthetic.main.fragment_fragmento1.np_movies_list
 import kotlinx.android.synthetic.main.fragment_fragmento1.rv_movies_list
+import kotlinx.android.synthetic.main.movies_item.view.ItemEntero
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,13 +34,15 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.activity_main)
         replaceFragment(Fragmento1())
 
+
     }
 
-    private fun replaceFragment(Fragment: Fragment) {
+    fun replaceFragment(Fragment: Fragment) {
 
         val fragmentManager = fragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameContainer,Fragment)
+        fragmentTransaction.disallowAddToBackStack()
         fragmentTransaction.commit()
     }
 
