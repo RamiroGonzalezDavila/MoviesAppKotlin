@@ -80,7 +80,9 @@ class Fragmento1 : android.app.Fragment() {
             np_movies_list.adapter = adapterNP
             adapterNP.setOnItemClickListener(object : MovieAdapter.onItemClickListener{
                 override fun onItemClick(position: Int) {
-                    Toast.makeText(context,"Is clicking NP no. $position",Toast.LENGTH_SHORT).show()
+                    var tt = movies[position].title
+                    Toast.makeText(context,"Is clicking NP  $tt",Toast.LENGTH_SHORT).show()
+
                 }
             })
         }
